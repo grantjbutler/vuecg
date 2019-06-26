@@ -49,7 +49,7 @@ export default {
             beforeCreate () {
                 if ('replicants' in this) {
                     this.$replicants = mapReplicants(this.replicants)
-                    this.$options.computed = extendComputed(this.$options.computed || {}, Object.keys(this.$replicant).map((replicant) => { return () => { return replicant.value }}))
+                    this.$options.computed = extendComputed(this.$options.computed || {}, Object.keys(this.$replicants).map((replicant) => { return () => { return replicant.value }}))
                 }
             }
         })

@@ -1,3 +1,5 @@
+let _Vue
+
 /**
  * @param {Array|Object}
  * @return {Object}
@@ -20,7 +22,7 @@ function mapReplicants (replicants) {
 
 class VueReplicant {
     constructor(name) {
-        Vue.util.defineReactive(this, 'value')
+        _Vue.util.defineReactive(this, 'value')
         
         this._replicant = nodecg.Replicant(name)
         this._replicant.on('change', (newValue) => { this.value = newValue })
@@ -35,7 +37,7 @@ class VueReplicant {
 function extendComputed (to, from) {
     for (const key in from) {
         if (key in to) {
-            Vue.util.warn(`A value for ${key} is already defined in the destination object`, to)
+            _Vue.util.warn(`A value for ${key} is already defined in the destination object`, to)
         }
 
         to[key] = from[key]
@@ -45,6 +47,8 @@ function extendComputed (to, from) {
 
 export default {
     install (Vue) {
+        _Vue = Vue
+        
         Vue.mixin({
             beforeCreate () {
                 if ('replicants' in this) {

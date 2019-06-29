@@ -51,9 +51,15 @@ export default {
         
         Vue.mixin({
             beforeCreate () {
-                if ('replicants' in this) {
-                    this.$replicants = mapReplicants(this.replicants)
-                    this.$options.computed = extendComputed(this.$options.computed || {}, Object.keys(this.$replicants).map((replicant) => { return () => { return replicant.value }}))
+                if ('replicants' in this.constructor.options) {
+                    this.$replicants = mapReplicants(this.constructor.options.replicants)
+                    
+                    let replicantGetters = Object.keys(this.$replicants).reduce((replicants, key) => {
+                        replicants[key] = () => { return this.$replicants[key].value }
+                        return replicants
+                    }, {})
+                    
+                    this.$options.computed = extendComputed(this.$options.computed || {}, replicantGetters)
                 }
             }
         })

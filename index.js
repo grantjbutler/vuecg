@@ -25,7 +25,9 @@ class VueReplicant {
         _Vue.util.defineReactive(this, 'value')
         
         this._replicant = nodecg.Replicant(name)
-        this._replicant.on('change', (newValue) => { this.value = newValue })
+        this._replicant.on('change', (newValue) => {
+            this.value = JSON.parse(JSON.stringify(newValue))
+        })
     }
 }
 

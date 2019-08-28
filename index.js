@@ -26,7 +26,12 @@ class VueReplicant {
         
         this._replicant = nodecg.Replicant(name)
         this._replicant.on('change', (newValue) => {
-            this.value = JSON.parse(JSON.stringify(newValue))
+            if (newValue != undefined) {
+                this.value = JSON.parse(JSON.stringify(newValue))
+            }
+            else {
+                this.value = undefined
+            }
         })
     }
 }

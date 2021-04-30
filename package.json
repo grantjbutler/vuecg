@@ -1,6 +1,6 @@
 {
   "name": "@grantjbutler/vuecg",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Vue.js bindings for NodeCG replicants.",
   "main": "index.js",
   "scripts": {

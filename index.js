@@ -6,8 +6,26 @@ let _Vue
  */
 function normalizeMap (map) {
     return Array.isArray(map)
-        ? map.map(key => ({ key, val: key }))
-        : Object.keys(map).map(key => ({ key, val: map[key] }))
+        ? map.map(key => ({ key, val: normalizeReplicantConfig(key) }))
+        : Object.keys(map).map(key => ({ key, val: normalizeReplicantConfig(map[key]) }))
+}
+
+function normalizeReplicantConfig(val) {
+    if (typeof val === 'string') {
+        return {
+            name: val,
+            persistent: true,
+            defaultValue: undefined
+        }
+    } else if (typeof val === 'object') {
+        return {
+            name: val.name,
+            persistent: ('persistent' in val) ? val.persistent : true,
+            defaultValue: ('defaultValue' in val) ? val.defaultValue : undefined
+        }
+    } else {
+        throw new Error(`Unexpected type ${typeof val} for normalizing replicant config`)
+    }
 }
 
 /**
@@ -15,16 +33,18 @@ function normalizeMap (map) {
  */
 function mapReplicants (replicants) {
     return normalizeMap(replicants).reduce((mapping, { key, val }) => {
-        mapping[val] = new VueReplicant(key)
+        mapping[key] = new VueReplicant(val)
         return mapping
     }, {})
 }
 
 class VueReplicant {
-    constructor(name) {
+    constructor({ name, persistent, defaultValue }) {
         _Vue.util.defineReactive(this, 'value')
+
+        this.value = defaultValue
         
-        this._replicant = nodecg.Replicant(name)
+        this._replicant = nodecg.Replicant(name, { persistent, defaultValue })
         this._replicant.on('change', (newValue) => {
             if (newValue != undefined) {
                 this.value = JSON.parse(JSON.stringify(newValue))
@@ -42,14 +62,19 @@ class VueReplicant {
  * @return {Object}
  */
 function extendComputed (to, from) {
+    let extended = {}
+    for (const key in to) {
+        extended[key] = to[key]
+    }
+    
     for (const key in from) {
-        if (key in to) {
+        if (key in extended) {
             _Vue.util.warn(`A value for ${key} is already defined in the destination object`, to)
         }
 
-        to[key] = from[key]
+        extended[key] = from[key]
     }
-    return to
+    return extended
 }
 
 export default {

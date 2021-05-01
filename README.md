@@ -19,7 +19,7 @@ export default {
 }
 ```
 
-# Use
+## Use
 
 For the most basic case, you can specify your replicants as an array of replicant names for the `replicant` key in your component, as shown in the example above. However, there may be some cases where the name of your replicant cannot work as a JavaScript identifier (for example, if you name space your replicants in a bundle in a format such as `namespace:replicant-name`. In cases like this, can you specify your replicants as an object, where the key is the name of the computed property generated for the replicant and the key is the name of the replicant.
 

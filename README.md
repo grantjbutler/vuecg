@@ -17,6 +17,7 @@ export default {
         'count'
     ]
 }
+</script>
 ```
 
 ## Use
@@ -34,6 +35,7 @@ export default {
         isPlaying: 'my-bundle:isPlaying'
     }
 }
+</script>
 ```
 
 Replicants won't have a value by the time Vue will do an initial rendering pass of your compontent. As a result, you'll need to handle a `null` value you for your replicant by using something like `v-if` to hide content until the replicant has a value. You can alternatively specify a default value for your replicant that will be used until a value for your replicant has been loaded.
@@ -56,6 +58,7 @@ export default {
         }
     }
 }
+</script>
 ```
 
 If you want a non-persistent replicant, you can specify that in the configuration object for the replicant. If you don't specify a value, then the replicant will be persistent.
@@ -74,4 +77,5 @@ export default {
         }
     }
 }
+</script>
 ```
